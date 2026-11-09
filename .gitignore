@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <<<<<< HEAD
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -71,3 +72,70 @@ instance/
 .scrapy
 
 # Sphinx documentation
+=======
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Python testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Python packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.yaml
+
+# IDE
+.vscode/
+.idea/
+
+# Operating system
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+
+# Docker
+.docker/
+
+# Kubernetes local configuration
+.kube/
+*.kubeconfig
+
+# Terraform (if used)
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Python tools
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+```
+>>>>>>> 35f10e8 (my argocd project)
