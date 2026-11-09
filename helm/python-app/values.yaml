@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: mayuri67/python-argocd
-  tag: latest
+  tag: dd825ac1cc5d68cf15f89efcfc78cf3b6f35651e
   pullPolicy: Always
 
 service:
