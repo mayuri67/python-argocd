@@ -1,0 +1,14 @@
+replicaCount: 2
+
+image:
+  repository: mayuri67/python-argocd
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: NodePort
+  port: 8000
+  targetPort: 8000
+  nodePort: 30080
+
+containerPort: 8000

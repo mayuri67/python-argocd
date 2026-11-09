@@ -1,0 +1,80 @@
+name: Python CI CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'helm/python-app/values.yaml'
+
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+env:
+  IMAGE_NAME: mayuri67/python-argocd
+
+jobs:
+
+  python-ci:
+    name: Python Testing
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Pytest
+        run: |
+          pytest -v
+
+      - name: Docker Hub Login
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker Image
+        if: github.event_name == 'push'
+        run: |
+          docker build \
+            -t $IMAGE_NAME:${GITHUB_SHA} \
+            .
+
+      - name: Push Docker Image
+        if: github.event_name == 'push'
+        run: |
+          docker push $IMAGE_NAME:${GITHUB_SHA}
+
+      - name: Update Helm Image Tag
+        if: github.event_name == 'push'
+        run: |
+          sed -i "s|^  tag:.*|  tag: ${GITHUB_SHA}|" \
+            helm/python-app/values.yaml
+
+      - name: Commit Helm Changes
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add helm/python-app/values.yaml
+
+          if ! git diff --cached --quiet; then
+            git commit -m "Update Python Docker image to ${GITHUB_SHA}"
+            git push
+          fi
